@@ -1,4 +1,4 @@
-import { addDays, format, lastDayOfMonth } from 'date-fns'
+import { addDays, format, lastDayOfMonth, isSaturday } from 'date-fns'
 import minimist from 'minimist'
 
 const defineTargetMonth = (argv) => {
@@ -14,11 +14,11 @@ const lastDate = lastDayOfMonth(target).getDate()
 const title = format(target, 'M月 yyyy')
 const firstWday = target.getDay()
 
-console.log(('      ' + title).slice(-13))
+console.log(title.padStart(13))
 console.log('日', '月', '火', '水', '木', '金', '土')
 process.stdout.write('   '.repeat(firstWday))
 for (let date = 1; date <= lastDate; date++) {
-  process.stdout.write((' ' + date).slice(-2) + ' ')
-  const wday = addDays(target, date - 1).getDay()
-  if (wday === 6) console.log()
+  process.stdout.write(date.toString().padStart(2) + ' ')
+  const thisDate = addDays(target, date - 1)
+  if (isSaturday(thisDate)) console.log()
 }
