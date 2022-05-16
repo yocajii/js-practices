@@ -1,5 +1,5 @@
 const MAX = 20
-for (let i = 1; i < MAX+1; i++) {
+for (let i = 1; i <= MAX; i++) {
   if ((i % 3) === 0 && (i % 5) === 0) {
     console.log('FizzBuzz')
   } else if ((i % 3) === 0) {
