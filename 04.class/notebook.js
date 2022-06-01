@@ -1,22 +1,43 @@
 import fs from 'fs'
+import inquirer from 'inquirer'
+const { prompt } = inquirer
 import { FileAgent } from './file-agent.js'
 
 export class Notebook {
-  notes() {
-    const fileAgent = new FileAgent()
-    return fileAgent.read()
-  }
   addNote() {
     const stdin = fs.readFileSync('/dev/stdin', 'utf8')
-    const notes = this.notes()
+    const notes = FileAgent.read()
     const title = stdin.split('\n')[0]
     notes.push({ title: title, body: stdin })
-    const fileAgent = new FileAgent()
-    fileAgent.write(notes)
+    FileAgent.write(notes)
   }
-  listNote() {
-    const notes = this.notes()
-    const titles = notes.map(note => note.title)
+  showNotes() {
+    const notes = FileAgent.read()
     notes.forEach(note => console.log(note.title))
+  }
+  async showNote() {
+    const notes = FileAgent.read()
+    const titles = notes.map(note => note.title)
+    const selected = await prompt({
+      type: 'list',
+      name: 'title',
+      message: 'Choose a note you want to delete:',
+      choices: titles
+    })
+    const selectedNote = notes.filter(note => note.title === selected.title)[0]
+    console.log(selectedNote.body)
+  }
+  async deleteNote() {
+    const notes = FileAgent.read()
+    const titles = notes.map(note => note.title)
+    const selected = await prompt({
+      type: 'list',
+      name: 'title',
+      message: 'Choose a note you want to see:',
+      choices: titles
+    })
+    const filteredNotes = notes.filter(note => note.title !== selected.title)
+    await FileAgent.write(filteredNotes)
+    console.log(`${selected.title} has been deleted.`)
   }
 }
