@@ -23,7 +23,7 @@ export class Notebook {
     const selected = await prompt({
       type: 'list',
       name: 'title',
-      message: 'Choose a note you want to delete:',
+      message: 'Choose a note you want to see:',
       choices: titles
     })
     const selectedNote = notes.filter(note => note.title === selected.title)[0]
@@ -37,7 +37,7 @@ export class Notebook {
       const selected = await prompt({
         type: 'list',
         name: 'title',
-        message: 'Choose a note you want to see:',
+        message: 'Choose a note you want to delete:',
         choices: titles
       })
       const filteredNotes = notes.filter(note => note.title !== selected.title)
